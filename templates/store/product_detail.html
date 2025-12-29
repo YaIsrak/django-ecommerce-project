@@ -106,7 +106,7 @@
 						<p class="text-danger font-weight-bold">Out of Stock</p>
 						{% else %}
 						<a
-							href="./product-detail.html"
+							href="{% url 'add_to_cart' single_product.id %}"
 							class="btn btn-primary">
 							<span class="text">Add to cart</span>
 							<i class="fas fa-shopping-cart"></i>
