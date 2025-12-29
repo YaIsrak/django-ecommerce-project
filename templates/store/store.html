@@ -168,7 +168,7 @@
 								<figcaption class="info-wrap">
 									<div class="fix-height">
 										<a
-											href="{{product.slug}}"
+											href="{% url 'product_detail' product.category.slug product.slug %}"
 											class="title"
 											>{{ product.product_name }}</a
 										>
