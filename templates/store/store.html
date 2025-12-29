@@ -36,9 +36,11 @@
 								id="collapse_1">
 								<div class="card-body">
 									<ul class="list-menu">
-										{% for category in categories %}
+										{% for category in links %}
 										<li>
-											<a href="#">{{ category.category_name }}</a>
+											<a href="{{category.get_url}}"
+												>{{ category.category_name }}</a
+											>
 										</li>
 										{% endfor %}
 									</ul>
