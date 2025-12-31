@@ -4,6 +4,8 @@ from .form import SignUpForm
 from .models import Account
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def signup(request):
@@ -31,7 +33,22 @@ def signup(request):
     return render(request, 'accounts/sign-up.html', context)
 
 def signin(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = auth.authenticate(email=email, password=password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'You are now logged in.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid login credentials.')
+            return redirect('sign_in')
     return render(request, 'accounts/sign-in.html')
 
+@login_required(login_url='sign_in')
 def signout(request):
-    return render(request, 'accounts/sign-out.html')
+    auth.logout(request)
+    messages.success(request, 'You are logged out.')
+    return redirect('sign_in')
