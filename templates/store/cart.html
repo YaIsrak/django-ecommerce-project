@@ -59,10 +59,16 @@
 												class="title text-dark"
 												>{{ item.product.product_name }}</a
 											>
+											{% if item.variations.all %}
+											<!--  -->
+											{% for i in item.variations.all %}
 											<p class="text-muted small">
-												Matrix: 25 Mpx <br />
-												Brand: Canon
+												{{ i.variation_category | capfirst }}: {{
+												i.variation_value | capfirst }}
 											</p>
+											{% endfor %}
+											<!--  -->
+											{% endif %}
 										</figcaption>
 									</figure>
 								</td>
@@ -72,10 +78,10 @@
 										<div class="input-group input-spinner">
 											<div class="input-group-prepend">
 												<a
-													href="{% url 'remove_cart' item.product.id %}"
+													href="{% url 'remove_cart' item.product.id item.id %}"
 													class="btn btn-light"
 													type="button"
-													id="button-plus">
+													id="button-minus">
 													<i class="fa fa-minus"></i>
 												</a>
 											</div>
@@ -84,13 +90,24 @@
 												class="form-control"
 												value="{{ item.quantity }}" />
 											<div class="input-group-append">
-												<a
-													href="{% url 'add_to_cart' item.product.id %}"
-													class="btn btn-light"
-													type="button"
-													id="button-minus">
-													<i class="fa fa-plus"></i>
-												</a>
+												<form
+													action="{% url 'add_to_cart' item.product.id %}"
+													method="POST">
+													{% csrf_token %}
+													<!--  -->
+													{% for item in item.variations.all %}
+													<input
+														type="hidden"
+														name="{{ item.variation_category | lower }}"
+														value="{{ item.variation_value | capfirst }}" />
+													{% endfor %}
+													<button
+														class="btn btn-light"
+														type="submit"
+														id="button-plus">
+														<i class="fa fa-plus"></i>
+													</button>
+												</form>
 											</div>
 										</div>
 										<!-- input-group.// -->
@@ -108,7 +125,7 @@
 								</td>
 								<td class="text-right">
 									<a
-										href="{% url 'remove_cart_item' item.product.id %}"
+										href="{% url 'remove_cart_item' item.product.id item.id %}"
 										class="btn btn-danger">
 										Remove</a
 									>
