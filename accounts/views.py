@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .form import SignUpForm
 from .models import Account
+from django.contrib import messages
+from django.shortcuts import redirect
 
 # Create your views here.
 def signup(request):
@@ -18,6 +20,9 @@ def signup(request):
             user = Account.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password)
             user.phone_number = phone_number
             user.save()
+
+            messages.success(request, 'Your account has been created successfully.')
+            return redirect('sign_up')
     else:
         form = SignUpForm()
 
